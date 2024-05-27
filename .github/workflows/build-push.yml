@@ -90,4 +90,5 @@ jobs:
             --format "value(status.url)"
 
       - name: Get Cloud Run URL
-        run: echo "Cloud Run URL: ${{ steps.deploy.outputs.url }}"
+        run: |
+          echo "Cloud Run URL: ${{ steps.deploy.outputs.url }}"
