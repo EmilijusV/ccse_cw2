@@ -43,6 +43,12 @@ jobs:
           tags: ${{ env.IMAGE_TAG }}:${{ github.ref_name }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          
+      - name: Inspect Docker Image
+        run: |
+          echo "Image tag: ${{ env.IMAGE_TAG }}:${{ github.ref_name }}"
+          docker pull "${{ env.IMAGE_TAG }}:${{ github.ref_name }}"
+          docker inspect "${{ env.IMAGE_TAG }}:${{ github.ref_name }}"
 
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
@@ -55,9 +61,3 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: snyk.sarif
-
-      - name: Inspect Docker Image
-        run: |
-          echo "Image tag: ${{ env.IMAGE_TAG }}:${{ github.ref_name }}"
-          docker pull "${{ env.IMAGE_TAG }}:${{ github.ref_name }}"
-          docker inspect "${{ env.IMAGE_TAG }}:${{ github.ref_name }}"
