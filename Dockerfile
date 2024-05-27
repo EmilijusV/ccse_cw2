@@ -1,7 +1,8 @@
 # Use the official .NET image as a build stage
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-EXPOSE 80
+EXPOSE 8080
+ENV PORT=8080
 
 # Use the SDK image to build the application
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
@@ -20,4 +21,4 @@ RUN dotnet publish "ccse_cw1.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ccse_cw1.dll"]
+ENTRYPOINT ["dotnet", "ccse_cw1.dll", "--urls=http://+:${PORT}"]
