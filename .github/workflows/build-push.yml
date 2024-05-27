@@ -49,7 +49,7 @@ jobs:
           echo "Image tag: ${{ env.IMAGE_TAG }}:${{ github.ref_name }}"
           docker pull "${{ env.IMAGE_TAG }}:${{ github.ref_name }}"
           docker inspect "${{ env.IMAGE_TAG }}:${{ github.ref_name }}"
-
+  
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
         continue-on-error: true
@@ -65,3 +65,29 @@ jobs:
         with:
           sarif_file: snyk.sarif
           category: snyk-sast-analysis
+
+  deploy:
+    needs: build-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Google Cloud Auth
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: "${{ secrets.GC_IMAGE_MANAGER_KEY }}"
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Deploy to Cloud Run
+        id: deploy
+        run: |
+          gcloud run deploy demo-1 \
+            --image ${{ env.IMAGE_TAG }}:${{ github.ref_name }} \
+            --region ${{ env.REGION }} \
+            --platform managed \
+            --project ${{ env.PROJECT }} \
+            --allow-unauthenticated \
+            --format "value(status.url)"
+
+      - name: Get Cloud Run URL
+        run: echo "Cloud Run URL: ${{ steps.deploy.outputs.url }}"
