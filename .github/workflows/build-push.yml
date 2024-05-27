@@ -10,7 +10,7 @@ env:
   PROJECT: sonorous-wharf-424609-c1
   REPO: main
   IMAGE: demo-1
-  GITHUB_REGISTRY: ghcr.io
+  GITHUB_REGISTRY: github.com
   GITHUB_REPOSITORY: ${{ github.repository }}
 
 jobs:
