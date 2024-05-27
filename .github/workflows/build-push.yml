@@ -10,6 +10,8 @@ env:
   PROJECT: sonorous-wharf-424609-c1
   REPO: main
   IMAGE: demo-1
+  GITHUB_REGISTRY: ghcr.io
+  GITHUB_REPOSITORY: ${{ github.repository }}
 
 jobs:
   build-push:
@@ -44,9 +46,16 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Snyk Scan
+      - name: Scan Docker image
         uses: snyk/actions/docker@master
+        continue-on-error: true
+        with:
+          image: ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_REPOSITORY }}:${{ env.DOCKER_IMAGE_TAG }}
+          args: --file=Dockerfile --severity-threshold=high --sarif-file-output=snyk.sarif
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Upload Snyk report as sarif
+        uses: github/codeql-action/upload-sarif@v2
         with:
-          image: ${{ env.IMAGE_TAG }}:${{ github.ref_name }}
+          sarif_file: snyk.sarif
