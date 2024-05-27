@@ -3,7 +3,7 @@ name: Build and Upload Docker Image
 on:
   push:
     branches:
-      -main
+      - main
 
 env:
   REGION: europe-west2
@@ -15,7 +15,7 @@ jobs:
   build-push:
     runs-on: ubuntu-latest
     steps:
-      - name: Chekch out the repo
+      - name: Check out the repo
         uses: actions/checkout@v4
 
       - name: Set vars
