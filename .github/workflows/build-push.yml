@@ -78,6 +78,9 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
 
+      - name: Enable Cloud Run API
+        run: gcloud services enable run.googleapis.com
+
       - name: Deploy to Cloud Run
         id: deploy
         run: |
