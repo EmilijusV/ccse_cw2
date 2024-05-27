@@ -85,7 +85,7 @@ jobs:
         id: deploy
         run: |
           gcloud run deploy demo-1 \
-            --image ${{ env.IMAGE_TAG }}:${{ github.ref_name }} \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT }}/${{ env.REPO }}/${{ env.IMAGE }}:${{ github.ref_name }} \
             --region ${{ env.REGION }} \
             --platform managed \
             --project ${{ env.PROJECT }} \
