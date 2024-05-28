@@ -134,7 +134,7 @@ jobs:
       - name: Set up OWASP ZAP
         uses: zaproxy/action-full-scan@v0.5.0
         with:
-          target: ${{ needs.deploy.outputs.get-url.outputs.CLOUD_RUN_URL }}
+          target: https://demo-1-jkjxbgu57q-nw.a.run.app
 
       - name: Upload DAST report
         uses: actions/upload-artifact@v3
