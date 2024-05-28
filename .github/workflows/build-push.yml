@@ -115,6 +115,10 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
 
+      - name: Print Cloud Run URL
+        run: |
+          echo "Cloud Run URL: ${{ env.CLOUD_RUN_URL }}"
+
       - name: Docker auth
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 
