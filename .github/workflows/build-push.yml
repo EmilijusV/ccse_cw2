@@ -108,9 +108,10 @@ jobs:
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
-
+      
       - name: Print Cloud Run URL for debugging
-        run: echo "Cloud Run URL for DAST scan - ${{ env.CLOUD_RUN_URL }}"
+        run: |
+        echo "Cloud Run URL for DAST scan: ${{ env.CLOUD_RUN_URL }}"
 
       - name: Run OWASP ZAP scan
         uses: zaproxy/action-full-scan@v0.10.0
@@ -118,4 +119,13 @@ jobs:
           target: ${{ env.CLOUD_RUN_URL }}
 
       - name: Upload ZAP Report
-        uses: actions/upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-report
+          path: /github/home/.zap/reports/*
+
+      - name: Upload ZAP scan result to GitHub code scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: /github/home/.zap/reports/zap.sarif
+          category: owasp-zap-dast-analysis
