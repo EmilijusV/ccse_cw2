@@ -101,12 +101,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - name: Google Cloud Auth
+      - name: Google Cloud Auth
         uses: google-github-actions/auth@v1
         with:
           credentials_json: "${{ secrets.GC_IMAGE_MANAGER_KEY }}"
 
-    - name: Set up Cloud SDK
+      - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
 
       - name: Run OWASP ZAP Baseline Scan
