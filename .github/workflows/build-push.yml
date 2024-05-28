@@ -109,12 +109,10 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
 
-      - name: Run OWASP ZAP Baseline Scan
-        uses: zaproxy/action-full-scan@v0.3.0
+      - name: Run OWASP ZAP scan
+        uses: zaproxy/action-full-scan@v0.10.0
         with:
-          target: "${{ env.CLOUD_RUN_URL }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          target: ${{ env.CLOUD_RUN_URL }}
 
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v3
