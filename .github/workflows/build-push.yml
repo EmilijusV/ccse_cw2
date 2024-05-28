@@ -115,6 +115,9 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
 
+      - name: Docker auth
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
       - name: Set up OWASP ZAP
         uses: zaproxy/action-full-scan@v0.5.0
         with:
