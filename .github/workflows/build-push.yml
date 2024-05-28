@@ -125,7 +125,7 @@ jobs:
       - name: Get Cloud Run Service URL
         id: get-url
         run: |
-          URL=$(gcloud run services describe ${{ env.GCP_CLOUD_RUN_SERVICE }} --region=${{ env.GCP_REGION }} --format 'value(status.url)')
+          URL=$(gcloud run services describe ${{ env.GCP_CLOUD_RUN_SERVICE }} --region=${{ env.REGION }} --format 'value(status.url)')
           echo "::set-output name=url::$URL"
 
       - name: Docker auth
