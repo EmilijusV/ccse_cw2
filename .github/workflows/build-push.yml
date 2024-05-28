@@ -10,6 +10,7 @@ env:
   PROJECT: sonorous-wharf-424609-c1
   REPO: main
   IMAGE: demo-1
+  GCP_CLOUD_RUN_SERVICE: demo-1
 
 jobs:
   build-push:
@@ -120,6 +121,12 @@ jobs:
       - name: Print Cloud Run URL
         run: |
           echo "Cloud Run URL: ${{ needs.deploy.outputs.get-url.outputs.CLOUD_RUN_URL }}"
+
+      - name: Get Cloud Run Service URL
+        id: get-url
+        run: |
+          URL=$(gcloud run services describe ${{ env.GCP_CLOUD_RUN_SERVICE }} --region=${{ env.GCP_REGION }} --format 'value(status.url)')
+          echo "::set-output name=url::$URL"
 
       - name: Docker auth
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
