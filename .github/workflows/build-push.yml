@@ -96,9 +96,8 @@ jobs:
       - name: Get Cloud Run URL
         id: get-url
         run: |
-          CLOUD_RUN_URL=$(gcloud run services describe ${{ env.GCP_CLOUD_RUN_SERVICE }} --region=${{ env.REGION }} --format 'value(status.url)')
-          echo "CLOUD_RUN_URL=$CLOUD_RUN_URL" >> $GITHUB_ENV
-          echo "CLOUD_RUN_URL=$CLOUD_RUN_URL" >> $GITHUB_OUTPUT
+          URL=$(gcloud run services describe ${{ env.GCP_CLOUD_RUN_SERVICE }} --region=${{ env.REGION }} --format 'value(status.url)')
+          echo "Cloud Run URL: $URL"
 
       - name: Print Cloud Run URL
         id: url-get
