@@ -96,7 +96,7 @@ jobs:
       - name: Get Cloud Run URL
         id: get-url
         run: |
-          CLOUD_RUN_URL=$(gcloud run services describe demo-1 --region ${{ env.REGION }} --format 'value(status.url)') >> $GITHUB_ENV
+          echo "CLOUD_RUN_URL=$(gcloud run services describe demo-1 --region ${{ env.REGION }} --format 'value(status.url)')" >> $GITHUB_ENV
           echo "CLOUD_RUN_URL=$CLOUD_RUN_URL" >> $GITHUB_OUTPUT
 
       - name: Print Cloud Run URL
@@ -135,9 +135,3 @@ jobs:
         uses: zaproxy/action-full-scan@v0.10.0
         with:
           target: https://demo-1-jkjxbgu57q-nw.a.run.app
-
-      - name: Upload DAST report
-        uses: actions/upload-artifact@v3
-        with:
-          name: zap-report
-          path: ${{ github.workspace }}/zap-report
