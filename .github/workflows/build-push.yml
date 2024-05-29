@@ -44,7 +44,11 @@ jobs:
           tags: ${{ env.IMAGE_TAG }}:${{ github.ref_name }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          
+
+  sast-scan:
+    needs: build-push
+    runs-on: ubuntu-latest
+    steps:
       - name: Inspect Docker Image
         run: |
           echo "Image tag: ${{ env.IMAGE_TAG }}:${{ github.ref_name }}"
