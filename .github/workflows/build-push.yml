@@ -63,7 +63,7 @@ jobs:
       - name: Restore project dependencies
         run: dotnet restore ${{ env.SOLUTION_NAME }}
 
-      - name: Run Snyk to check Docker image for vulnerabilities
+      - name: Run Snyk to check application for vulnerabilities
         uses: snyk/actions/dotnet@master
         continue-on-error: true
         env:
