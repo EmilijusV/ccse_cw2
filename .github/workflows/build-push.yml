@@ -15,7 +15,9 @@ env:
   SOLUTION_NAME: ccse_cw1.sln
 
 permissions:
+  contents: write
   issues: write
+  security-events: write
 
 jobs:
   build-push:
