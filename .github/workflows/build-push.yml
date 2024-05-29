@@ -14,6 +14,9 @@ env:
   DOTNET_CORE_VERSION: 7.0.x
   SOLUTION_NAME: ccse_cw1.sln
 
+permissions:
+  issues: write
+
 jobs:
   build-push:
     runs-on: ubuntu-latest
@@ -132,3 +135,12 @@ jobs:
         uses: zaproxy/action-full-scan@v0.10.0
         with:
           target: ${{ steps.get-url.outputs.url }}
+
+      - name: Create GitHub Issue on Alerts
+        if: failure()
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/issues \
+            -d '{"title":"OWASP ZAP Scan Alerts","body":"OWASP ZAP scan found vulnerabilities. Please check the details and address them accordingly."}'
