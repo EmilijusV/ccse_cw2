@@ -105,9 +105,15 @@ jobs:
         run: |
           echo "Cloud Run URL: ${{ env.CLOUD_RUN_URL }}"
 
+      - name: Create env file
+        run: |
+          echo "CLOUD_RUN_URL=${{ env.CLOUD_RUN_URL }}" >> $GITHUB_ENV
+
   dast-scan:
     needs: deploy
     runs-on: ubuntu-latest
+    env:
+      CLOUD_RUN_URL: ${{ env.CLOUD_RUN_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -124,9 +130,9 @@ jobs:
         run: |
           echo "Cloud Run URL: ${{ needs.deploy.outputs.get-url.outputs.CLOUD_RUN_URL }}"
 
-      - name: Print Cloud Run URL
+      - name: Print Cloud Run URLL
         run: |
-          echo "Cloud Run URL: ${{ needs.deploy.outputs.url-get.outputs.CLOUD_RUN_URL }}"
+          echo "Cloud Run URL: ${{ env.CLOUD_RUN_URL }}"
 
       - name: Get Cloud Run Service URL
         id: get-url
