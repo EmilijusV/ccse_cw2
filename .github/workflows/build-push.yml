@@ -11,6 +11,8 @@ env:
   REPO: main
   IMAGE: demo-1
   GCP_CLOUD_RUN_SERVICE: demo-1
+  DOTNET_CORE_VERSION: 7.0.x
+  SOLUTION_NAME: ccse_cw1.sln
 
 jobs:
   build-push:
@@ -53,34 +55,21 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v4
 
-      - name: Set vars
-        run: echo "IMAGE_TAG=$REGION-docker.pkg.dev/$PROJECT/$REPO/$IMAGE" >> $GITHUB_ENV
-
-      - name: Google Cloud Auth
-        uses: google-github-actions/auth@v1
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
         with:
-          credentials_json: "${{ secrets.GC_IMAGE_MANAGER_KEY }}"
+          dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+      
+      - name: Restore project dependencies
+        run: dotnet restore ${{ env.SOLUTION_NAME }}
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-
-      - name: Docker auth
-        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
-
-      - name: Inspect Docker Image
-        run: |
-          echo "Image tag: ${{ env.IMAGE_TAG }}:${{ github.ref_name }}"
-          docker pull "${{ env.IMAGE_TAG }}:${{ github.ref_name }}"
-          docker inspect "${{ env.IMAGE_TAG }}:${{ github.ref_name }}"
-  
       - name: Run Snyk to check Docker image for vulnerabilities
-        uses: snyk/actions/docker@master
+        uses: snyk/actions/dotnet@master
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT }}/${{ env.REPO }}/${{ env.IMAGE }}:${{ github.ref_name }}
-          args: --exit-code=0 --sarif-file-output=snyk.sarif
+          args: --json > snyk.json
 
       - name: Upload result to GitHub code scanning
         uses: github/codeql-action/upload-sarif@v3
