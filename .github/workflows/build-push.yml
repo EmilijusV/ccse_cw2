@@ -2,8 +2,8 @@ name: Build, Scan and Upload Docker Image
 
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - main
 
 env:
   REGION: europe-west2
