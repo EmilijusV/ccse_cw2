@@ -80,10 +80,9 @@ jobs:
           args: --sarif-file-output=snyk.sarif
 
       - name: Upload result to GitHub code scanning
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: snyk.sarif
-          category: snyk-sast-analysis
 
   deploy:
     needs: build-push
