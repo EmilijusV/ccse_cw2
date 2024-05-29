@@ -107,7 +107,7 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     env:
-      CLOUD_RUN_URL: ${{ needs.deploy.outputs.set-url-output.outputs.CLOUD_RUN_URL }}
+      CLOUD_RUN_URL: ${{ needs.deploy.outputs.get-url.outputs.CLOUD_RUN_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
