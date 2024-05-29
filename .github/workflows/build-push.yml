@@ -53,8 +53,9 @@ jobs:
   sast-scan:
     needs: build-push
     runs-on: ubuntu-latest
-    permissions: write-all
-    
+    permissions:
+      security-events: write
+
     steps:
 
       - name: Check out the repo
