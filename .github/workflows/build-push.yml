@@ -139,7 +139,7 @@ jobs:
           echo "Cloud Run URL: ${{ steps.get-url.outputs.url }}"
 
       - name: Get Cloud Run Service URL
-        id: get-url
+        id: url-get
         run: |
           URL=$(gcloud run services describe ${{ env.GCP_CLOUD_RUN_SERVICE }} --region=${{ env.REGION }} --format 'value(status.url)')
           echo "::set-output name=url::$URL"
